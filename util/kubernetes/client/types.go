@@ -94,7 +94,7 @@ type Metadata struct {
 // PodSpec is a pod
 type PodSpec struct {
 	Containers       []Container       `json:"containers"`
-	ImagePullSecrets []ImagePullSecret `json:"imagePullSecrets"`
+	ImagePullSecrets []ImagePullSecret `json:"imagePullSecrets,omitempty"`
 }
 
 // PodList
@@ -193,4 +193,11 @@ type NamespaceList struct {
 // ImagePullSecret
 type ImagePullSecret struct {
 	Name string `json:"name"`
+}
+
+// Secret is kubernetes secret
+type Secret struct {
+	Metadata *Metadata `json:"metadata,omitempty"`
+	Type     string    `json:"type"`
+	Data     string    `json:"data"`
 }

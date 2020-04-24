@@ -47,6 +47,7 @@ type RuntimeService interface {
 	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error)
 	Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*UpdateResponse, error)
 	Logs(ctx context.Context, in *LogsRequest, opts ...client.CallOption) (Runtime_LogsService, error)
+	Secret(ctx context.Context, in *SecretRequest, opts ...client.CallOption) (*SecretResponse, error)
 }
 
 type runtimeService struct {
@@ -150,6 +151,16 @@ func (x *runtimeServiceLogs) Recv() (*LogRecord, error) {
 	return m, nil
 }
 
+func (c *runtimeService) Secret(ctx context.Context, in *SecretRequest, opts ...client.CallOption) (*SecretResponse, error) {
+	req := c.c.NewRequest(c.name, "Runtime.Secret", in)
+	out := new(SecretResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Runtime service
 
 type RuntimeHandler interface {
@@ -158,6 +169,7 @@ type RuntimeHandler interface {
 	Delete(context.Context, *DeleteRequest, *DeleteResponse) error
 	Update(context.Context, *UpdateRequest, *UpdateResponse) error
 	Logs(context.Context, *LogsRequest, Runtime_LogsStream) error
+	Secret(context.Context, *SecretRequest, *SecretResponse) error
 }
 
 func RegisterRuntimeHandler(s server.Server, hdlr RuntimeHandler, opts ...server.HandlerOption) error {
@@ -167,6 +179,7 @@ func RegisterRuntimeHandler(s server.Server, hdlr RuntimeHandler, opts ...server
 		Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error
 		Update(ctx context.Context, in *UpdateRequest, out *UpdateResponse) error
 		Logs(ctx context.Context, stream server.Stream) error
+		Secret(ctx context.Context, in *SecretRequest, out *SecretResponse) error
 	}
 	type Runtime struct {
 		runtime
@@ -233,4 +246,8 @@ func (x *runtimeLogsStream) RecvMsg(m interface{}) error {
 
 func (x *runtimeLogsStream) Send(m *LogRecord) error {
 	return x.stream.Send(m)
+}
+
+func (h *runtimeHandler) Secret(ctx context.Context, in *SecretRequest, out *SecretResponse) error {
+	return h.RuntimeHandler.Secret(ctx, in, out)
 }

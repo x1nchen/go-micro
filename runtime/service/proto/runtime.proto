@@ -8,6 +8,7 @@ service Runtime {
 	rpc Delete(DeleteRequest) returns (DeleteResponse) {};
 	rpc Update(UpdateRequest) returns (UpdateResponse) {};
 	rpc Logs(LogsRequest) returns (stream LogRecord) {};
+	rpc Secret(SecretRequest) returns (SecretResponse) {};
 }
 
 message Service {
@@ -109,3 +110,15 @@ message LogRecord {
 	string message = 3;
 }
 
+message SecretRequest {
+	// name of the secret
+	string name = 1;
+	// type of secret
+	string type = 2;
+	// data to encode in the secret (base64 values)
+	map<string,string> data = 3;
+	// metadata
+	map<string, string> metadata = 4;
+}
+
+message SecretResponse {}
