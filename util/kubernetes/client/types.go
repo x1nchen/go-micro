@@ -197,7 +197,7 @@ type ImagePullSecret struct {
 
 // Secret is kubernetes secret
 type Secret struct {
-	Metadata *Metadata `json:"metadata,omitempty"`
-	Type     string    `json:"type"`
-	Data     string    `json:"data"`
+	Metadata *Metadata         `json:"metadata,omitempty"`
+	Type     string            `json:"type"`
+	Data     map[string]string `json:"data"`
 }
