@@ -108,3 +108,4 @@ message LogRecord {
 	// message
 	string message = 3;
 }
+
