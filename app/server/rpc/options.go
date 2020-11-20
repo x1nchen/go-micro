@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	mbroker "github.com/asim/nitro/app/broker/memory"
+	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/codec"
 	tmem "github.com/asim/nitro/app/network/memory"
 	"github.com/asim/nitro/app/registry/memory"
@@ -21,7 +21,7 @@ func newOptions(opt ...server.Option) server.Options {
 	}
 
 	if opts.Broker == nil {
-		opts.Broker = mbroker.NewBroker()
+		opts.Broker = mevent.NewBroker()
 	}
 
 	if opts.Registry == nil {

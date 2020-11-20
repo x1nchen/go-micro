@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/asim/nitro/app/broker"
-	mbroker "github.com/asim/nitro/app/broker/memory"
+	"github.com/asim/nitro/app/event"
+	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/client"
 	rpcClient "github.com/asim/nitro/app/client/rpc"
 	"github.com/asim/nitro/app/network"
@@ -17,7 +17,7 @@ import (
 )
 
 type Options struct {
-	Broker   broker.Broker
+	Broker   event.Broker
 	Client   client.Client
 	Server   server.Server
 	Registry registry.Registry
@@ -36,7 +36,7 @@ type Options struct {
 type Option func(*Options)
 
 func NewOptions(opts ...Option) Options {
-	b := mbroker.NewBroker()
+	b := mevent.NewBroker()
 	c := rpcClient.NewClient()
 	s := rpcServer.NewServer()
 	r := memory.NewRegistry()
@@ -72,7 +72,7 @@ func NewOptions(opts ...Option) Options {
 	return opt
 }
 
-func Broker(b broker.Broker) Option {
+func Broker(b event.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b
 		// Update Client and Server
@@ -111,7 +111,7 @@ func Registry(r registry.Registry) Option {
 		// Update server
 		o.Server.Init(server.Registry(r))
 		// Update Broker
-		o.Broker.Init(broker.Registry(r))
+		o.Broker.Init(event.Registry(r))
 		// Update router
 		o.Client.Init(client.Registry(r))
 	}

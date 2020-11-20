@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/asim/nitro/app/broker"
-	mbroker "github.com/asim/nitro/app/broker/memory"
+	"github.com/asim/nitro/app/event"
+	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/codec"
 	"github.com/asim/nitro/app/network"
 	tmem "github.com/asim/nitro/app/network/memory"
@@ -23,7 +23,7 @@ type Options struct {
 	Proxy string
 
 	// Plugged interfaces
-	Broker    broker.Broker
+	Broker    event.Broker
 	Codecs    map[string]codec.NewCodec
 	Router    router.Router
 	Selector  selector.Selector
@@ -117,7 +117,7 @@ func NewOptions(options ...Option) Options {
 		Lookup:    LookupRoute,
 		PoolSize:  DefaultPoolSize,
 		PoolTTL:   DefaultPoolTTL,
-		Broker:    mbroker.NewBroker(),
+		Broker:    mevent.NewBroker(),
 		Router:    regRouter.NewRouter(),
 		Selector:  roundrobin.NewSelector(),
 		Transport: tmem.NewTransport(),
@@ -131,7 +131,7 @@ func NewOptions(options ...Option) Options {
 }
 
 // Broker to be used for pub/sub
-func Broker(b broker.Broker) Option {
+func Broker(b event.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b
 	}

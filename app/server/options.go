@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/asim/nitro/app/auth"
-	"github.com/asim/nitro/app/broker"
-	mbroker "github.com/asim/nitro/app/broker/memory"
+	"github.com/asim/nitro/app/event"
+	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/codec"
 	"github.com/asim/nitro/app/network"
 	tmem "github.com/asim/nitro/app/network/memory"
@@ -18,7 +18,7 @@ import (
 
 type Options struct {
 	Codecs       map[string]codec.NewCodec
-	Broker       broker.Broker
+	Broker       event.Broker
 	Registry     registry.Registry
 	Auth         auth.Auth
 	Transport    network.Transport
@@ -63,7 +63,7 @@ func newOptions(opt ...Option) Options {
 	}
 
 	if opts.Broker == nil {
-		opts.Broker = mbroker.NewBroker()
+		opts.Broker = mevent.NewBroker()
 	}
 
 	if opts.Registry == nil {
@@ -140,7 +140,7 @@ func Advertise(a string) Option {
 }
 
 // Broker to use for pub/sub
-func Broker(b broker.Broker) Option {
+func Broker(b event.Broker) Option {
 	return func(o *Options) {
 		o.Broker = b
 	}

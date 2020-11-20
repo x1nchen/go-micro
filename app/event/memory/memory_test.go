@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/asim/nitro/app/broker"
+	"github.com/asim/nitro/app/event"
 )
 
 func TestMemoryBroker(t *testing.T) {
@@ -17,7 +17,7 @@ func TestMemoryBroker(t *testing.T) {
 	topic := "test"
 	count := 10
 
-	fn := func(m *broker.Message) error {
+	fn := func(m *event.Message) error {
 		return nil
 	}
 
@@ -27,7 +27,7 @@ func TestMemoryBroker(t *testing.T) {
 	}
 
 	for i := 0; i < count; i++ {
-		message := &broker.Message{
+		message := &event.Message{
 			Header: map[string]string{
 				"foo": "bar",
 				"id":  fmt.Sprintf("%d", i),

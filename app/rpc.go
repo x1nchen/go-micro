@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 
-	mbroker "github.com/asim/nitro/app/broker/memory"
+	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/client"
 	rpcClient "github.com/asim/nitro/app/client/rpc"
 	tmem "github.com/asim/nitro/app/network/memory"
@@ -123,7 +123,7 @@ func (s *rpcApp) Run() error {
 
 // New returns a new Nitro app
 func New(opts ...Option) *rpcApp {
-	b := mbroker.NewBroker()
+	b := mevent.NewBroker()
 	c := rpcClient.NewClient()
 	s := rpcServer.NewServer()
 	r := memory.NewRegistry()

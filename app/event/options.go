@@ -1,4 +1,4 @@
-package broker
+package event
 
 import (
 	"context"
@@ -64,7 +64,7 @@ func NewSubscribeOptions(opts ...SubscribeOption) SubscribeOptions {
 	return opt
 }
 
-// Addrs sets the host addresses to be used by the broker
+// Addrs sets the host addresses to be used by the event
 func Addrs(addrs ...string) Option {
 	return func(o *Options) {
 		o.Addrs = addrs
@@ -72,14 +72,14 @@ func Addrs(addrs ...string) Option {
 }
 
 // Codec sets the codec used for encoding/decoding used where
-// a broker does not support headers
+// a event does not support headers
 func Codec(c codec.Marshaler) Option {
 	return func(o *Options) {
 		o.Codec = c
 	}
 }
 
-// ErrorHandler will catch all broker errors that cant be handled
+// ErrorHandler will catch all event errors that cant be handled
 // in normal way, for example Codec errors
 func HandleError(h ErrorHandler) SubscribeOption {
 	return func(o *SubscribeOptions) {
@@ -100,7 +100,7 @@ func Registry(r registry.Registry) Option {
 	}
 }
 
-// Secure communication with the broker
+// Secure communication with the event
 func Secure(b bool) Option {
 	return func(o *Options) {
 		o.Secure = b

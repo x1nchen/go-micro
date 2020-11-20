@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asim/nitro/app/broker"
+	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/codec"
 	raw "github.com/asim/nitro/app/codec/bytes"
 	"github.com/asim/nitro/app/logger"
@@ -33,13 +33,13 @@ type rpcServer struct {
 	sync.RWMutex
 	opts        server.Options
 	handlers    map[string]server.Handler
-	subscribers map[server.Subscriber][]broker.Subscriber
+	subscribers map[server.Subscriber][]event.Subscriber
 	// marks the serve as started
 	started bool
 	// used for first registration
 	registered bool
 	// subscribe to service name
-	subscriber broker.Subscriber
+	subscriber event.Subscriber
 	// graceful exit
 	wg *sync.WaitGroup
 
@@ -71,7 +71,7 @@ func newServer(opts ...server.Option) server.Server {
 		opts:        options,
 		router:      router,
 		handlers:    make(map[string]server.Handler),
-		subscribers: make(map[server.Subscriber][]broker.Subscriber),
+		subscribers: make(map[server.Subscriber][]event.Subscriber),
 		exit:        make(chan chan error),
 		wg:          wait(options.Context),
 	}
@@ -79,7 +79,7 @@ func newServer(opts ...server.Option) server.Server {
 
 // HandleEvent handles inbound messages to the service directly
 // TODO: handle requests from an event. We won't send a response.
-func (s *rpcServer) HandleEvent(msg *broker.Message) error {
+func (s *rpcServer) HandleEvent(msg *event.Message) error {
 	if msg.Header == nil {
 		// create empty map in case of headers empty to avoid panic later
 		msg.Header = make(map[string]string)
@@ -604,7 +604,7 @@ func (s *rpcServer) Register() error {
 	}
 
 	node.Metadata["network"] = config.Transport.String()
-	node.Metadata["broker"] = config.Broker.String()
+	node.Metadata["event"] = config.Broker.String()
 	node.Metadata["server"] = s.String()
 	node.Metadata["registry"] = config.Registry.String()
 	node.Metadata["protocol"] = "rpc"
@@ -692,13 +692,13 @@ func (s *rpcServer) Register() error {
 
 	// subscribe for all of the subscribers
 	for sb := range s.subscribers {
-		var opts []broker.SubscribeOption
+		var opts []event.SubscribeOption
 		if queue := sb.Options().Queue; len(queue) > 0 {
-			opts = append(opts, broker.Queue(queue))
+			opts = append(opts, event.Queue(queue))
 		}
 
 		if cx := sb.Options().Context; cx != nil {
-			opts = append(opts, broker.SubscribeContext(cx))
+			opts = append(opts, event.SubscribeContext(cx))
 		}
 
 		sub, err := config.Broker.Subscribe(sb.Topic(), s.HandleEvent, opts...)
@@ -708,7 +708,7 @@ func (s *rpcServer) Register() error {
 		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
 			log.Infof("Subscribing to topic: %s", sub.Topic())
 		}
-		s.subscribers[sb] = []broker.Subscriber{sub}
+		s.subscribers[sb] = []event.Subscriber{sub}
 	}
 	if cacheService {
 		s.rsvc = service
@@ -836,7 +836,7 @@ func (s *rpcServer) Start() error {
 
 	bname := config.Broker.String()
 
-	// connect to the broker
+	// connect to the event
 	if err := config.Broker.Connect(); err != nil {
 		if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 			log.Errorf("Broker [%s] connect error: %v", bname, err)
@@ -870,7 +870,7 @@ func (s *rpcServer) Start() error {
 			err := ts.Accept(s.ServeConn)
 
 			// TODO: listen for messages
-			// msg := broker.Exchange(service).Consume()
+			// msg := event.Exchange(service).Consume()
 
 			select {
 			// check if we're supposed to exit
@@ -969,7 +969,7 @@ func (s *rpcServer) Start() error {
 		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
 			log.Infof("Broker [%s] Disconnected from %s", bname, config.Broker.Address())
 		}
-		// disconnect the broker
+		// disconnect the event
 		if err := config.Broker.Disconnect(); err != nil {
 			if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
 				log.Errorf("Broker [%s] Disconnect error: %v", bname, err)

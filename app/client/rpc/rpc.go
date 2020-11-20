@@ -7,7 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/asim/nitro/app/broker"
+	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/client"
 	"github.com/asim/nitro/app/codec"
 	raw "github.com/asim/nitro/app/codec/bytes"
@@ -607,10 +607,10 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 		r.once.Store(true)
 	}
 
-	return r.opts.Broker.Publish(topic, &broker.Message{
+	return r.opts.Broker.Publish(topic, &event.Message{
 		Header: md,
 		Body:   body,
-	}, broker.PublishContext(options.Context))
+	}, event.PublishContext(options.Context))
 }
 
 func (r *rpcClient) NewMessage(topic string, message interface{}, opts ...client.MessageOption) client.Message {

@@ -1,4 +1,4 @@
-// Package memory provides a memory broker
+// Package memory provides a memory event
 package memory
 
 import (
@@ -8,14 +8,14 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asim/nitro/app/broker"
+	"github.com/asim/nitro/app/event"
 	maddr "github.com/asim/nitro/util/addr"
 	mnet "github.com/asim/nitro/util/net"
 	"github.com/asim/nitro/util/uuid"
 )
 
 type memoryBroker struct {
-	opts broker.Options
+	opts event.Options
 
 	addr string
 	sync.RWMutex
@@ -27,11 +27,11 @@ type memorySubscriber struct {
 	id      string
 	topic   string
 	exit    chan bool
-	handler broker.Handler
-	opts    broker.SubscribeOptions
+	handler event.Handler
+	opts    event.SubscribeOptions
 }
 
-func (m *memoryBroker) Options() broker.Options {
+func (m *memoryBroker) Options() event.Options {
 	return m.opts
 }
 
@@ -75,14 +75,14 @@ func (m *memoryBroker) Disconnect() error {
 	return nil
 }
 
-func (m *memoryBroker) Init(opts ...broker.Option) error {
+func (m *memoryBroker) Init(opts ...event.Option) error {
 	for _, o := range opts {
 		o(&m.opts)
 	}
 	return nil
 }
 
-func (m *memoryBroker) Publish(topic string, msg *broker.Message, opts ...broker.PublishOption) error {
+func (m *memoryBroker) Publish(topic string, msg *event.Message, opts ...event.PublishOption) error {
 	m.RLock()
 	if !m.connected {
 		m.RUnlock()
@@ -107,7 +107,7 @@ func (m *memoryBroker) Publish(topic string, msg *broker.Message, opts ...broker
 	return nil
 }
 
-func (m *memoryBroker) Subscribe(topic string, handler broker.Handler, opts ...broker.SubscribeOption) (broker.Subscriber, error) {
+func (m *memoryBroker) Subscribe(topic string, handler event.Handler, opts ...event.SubscribeOption) (event.Subscriber, error) {
 	m.RLock()
 	if !m.connected {
 		m.RUnlock()
@@ -115,7 +115,7 @@ func (m *memoryBroker) Subscribe(topic string, handler broker.Handler, opts ...b
 	}
 	m.RUnlock()
 
-	var options broker.SubscribeOptions
+	var options event.SubscribeOptions
 	for _, o := range opts {
 		o(&options)
 	}
@@ -153,7 +153,7 @@ func (m *memoryBroker) String() string {
 	return "memory"
 }
 
-func (m *memorySubscriber) Options() broker.SubscribeOptions {
+func (m *memorySubscriber) Options() event.SubscribeOptions {
 	return m.opts
 }
 
@@ -166,8 +166,8 @@ func (m *memorySubscriber) Unsubscribe() error {
 	return nil
 }
 
-func NewBroker(opts ...broker.Option) broker.Broker {
-	options := broker.Options{
+func NewBroker(opts ...event.Option) event.Broker {
+	options := event.Options{
 		Context: context.Background(),
 	}
 

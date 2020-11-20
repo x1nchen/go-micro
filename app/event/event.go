@@ -1,5 +1,5 @@
-// Package broker is an interface used for asynchronous messaging
-package broker
+// Package event is an interface used for asynchronous messaging
+package event
 
 // Broker is an interface used for asynchronous messaging.
 type Broker interface {
