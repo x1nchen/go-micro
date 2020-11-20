@@ -5,8 +5,8 @@ package app
 type App interface {
 	// Set the current application name
 	Name(string)
-	// Call an application by name and endpoint
-	Call(name, ep string, req, rsp interface{}) error
+	// Request an application by name and endpoint
+	Request(name, ep string, req, rsp interface{}) error
 	// Broadcast a message to all subscribers
 	Broadcast(topic string, msg interface{}) error
 	// Register a handler e.g a public Go struct/method with signature func(context.Context, *Request, *Response) error

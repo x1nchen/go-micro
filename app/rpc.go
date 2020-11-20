@@ -36,19 +36,19 @@ func (s *rpcApp) Options() Options {
 	return s.opts
 }
 
-func (s *rpcApp) Call(name, ep string, req, rsp interface{}) error {
+func (s *rpcApp) Request(name, ep string, req, rsp interface{}) error {
 	r := s.Client().NewRequest(name, ep, req)
 	return s.Client().Call(context.Background(), r, rsp)
-}
-
-func (s *rpcApp) Handle(v interface{}) error {
-	h := s.Server().NewHandler(v)
-	return s.Server().Handle(h)
 }
 
 func (s *rpcApp) Broadcast(topic string, msg interface{}) error {
 	m := s.Client().NewMessage(topic, msg)
 	return s.Client().Publish(context.Background(), m)
+}
+
+func (s *rpcApp) Handle(v interface{}) error {
+	h := s.Server().NewHandler(v)
+	return s.Server().Handle(h)
 }
 
 func (s *rpcApp) Subscribe(topic string, v interface{}) error {
