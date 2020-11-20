@@ -6,7 +6,6 @@ import (
 
 	"github.com/asim/nitro/app/codec"
 	raw "github.com/asim/nitro/app/codec/bytes"
-	"github.com/asim/nitro/app/codec/grpc"
 	"github.com/asim/nitro/app/codec/json"
 	"github.com/asim/nitro/app/codec/jsonrpc"
 	"github.com/asim/nitro/app/codec/proto"
@@ -39,9 +38,6 @@ var (
 	DefaultContentType = "application/json"
 
 	DefaultCodecs = map[string]codec.NewCodec{
-		"application/grpc":         grpc.NewCodec,
-		"application/grpc+json":    grpc.NewCodec,
-		"application/grpc+proto":   grpc.NewCodec,
 		"application/json":         json.NewCodec,
 		"application/json-rpc":     jsonrpc.NewCodec,
 		"application/protobuf":     proto.NewCodec,
