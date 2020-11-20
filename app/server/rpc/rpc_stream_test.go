@@ -4,24 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"math/rand"
 	"sync"
 	"testing"
-	"time"
 
 	"github.com/asim/nitro/app/codec/json"
-	protoCodec "github.com/asim/nitro/app/codec/proto"
-	"github.com/golang/protobuf/proto"
 )
 
-// protoStruct implements proto.Message
-type protoStruct struct {
-	Payload string `protobuf:"bytes,1,opt,name=service,proto3" json:"service,omitempty"`
+// jsonStruct implements proto.Message
+type jsonStruct struct {
+	Payload string
 }
-
-func (m *protoStruct) Reset()         { *m = protoStruct{} }
-func (m *protoStruct) String() string { return proto.CompactTextString(m) }
-func (*protoStruct) ProtoMessage()    {}
 
 // safeBuffer throws away everything and wont Read data back
 type safeBuffer struct {
@@ -91,43 +83,4 @@ func TestRPCStream_Sequence(t *testing.T) {
 			t.Errorf("Unexpected msg: %s", msg)
 		}
 	}
-}
-
-func TestRPCStream_Concurrency(t *testing.T) {
-	buffer := new(safeBuffer)
-	codec := protoCodec.NewCodec(buffer)
-	streamServer := rpcStream{
-		codec: codec,
-		request: &rpcRequest{
-			codec: codec,
-		},
-	}
-
-	var wg sync.WaitGroup
-	// Check if race conditions happen
-	for i := 0; i < 10; i++ {
-		wg.Add(2)
-
-		go func() {
-			for i := 0; i < 50; i++ {
-				msg := protoStruct{Payload: "test"}
-				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
-				if err := streamServer.Send(msg); err != nil {
-					t.Errorf("Unexpected Send error: %s", err)
-				}
-			}
-			wg.Done()
-		}()
-
-		go func() {
-			for i := 0; i < 50; i++ {
-				<-time.After(time.Duration(rand.Intn(50)) * time.Millisecond)
-				if err := streamServer.Recv(&protoStruct{}); err != nil {
-					t.Errorf("Unexpected Recv error: %s", err)
-				}
-			}
-			wg.Done()
-		}()
-	}
-	wg.Wait()
 }

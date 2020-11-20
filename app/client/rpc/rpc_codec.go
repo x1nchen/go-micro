@@ -8,8 +8,6 @@ import (
 	raw "github.com/asim/nitro/app/codec/bytes"
 	"github.com/asim/nitro/app/codec/json"
 	"github.com/asim/nitro/app/codec/jsonrpc"
-	"github.com/asim/nitro/app/codec/proto"
-	"github.com/asim/nitro/app/codec/protorpc"
 	"github.com/asim/nitro/app/errors"
 	"github.com/asim/nitro/app/network"
 	"github.com/asim/nitro/app/registry"
@@ -52,20 +50,15 @@ var (
 	DefaultContentType = "application/json"
 
 	DefaultCodecs = map[string]codec.NewCodec{
-		"application/protobuf":     proto.NewCodec,
 		"application/json":         json.NewCodec,
 		"application/json-rpc":     jsonrpc.NewCodec,
-		"application/proto-rpc":    protorpc.NewCodec,
 		"application/octet-stream": raw.NewCodec,
 	}
 
 	// TODO: remove legacy codec list
 	defaultCodecs = map[string]codec.NewCodec{
-		"application/json":         jsonrpc.NewCodec,
-		"application/json-rpc":     jsonrpc.NewCodec,
-		"application/protobuf":     protorpc.NewCodec,
-		"application/proto-rpc":    protorpc.NewCodec,
-		"application/octet-stream": protorpc.NewCodec,
+		"application/json":     jsonrpc.NewCodec,
+		"application/json-rpc": jsonrpc.NewCodec,
 	}
 )
 
@@ -139,8 +132,6 @@ func setupProtocol(msg *network.Message, node *registry.Node) codec.NewCodec {
 	switch msg.Header["Content-Type"] {
 	case "application/json":
 		msg.Header["Content-Type"] = "application/json-rpc"
-	case "application/protobuf":
-		msg.Header["Content-Type"] = "application/proto-rpc"
 	}
 
 	// now return codec

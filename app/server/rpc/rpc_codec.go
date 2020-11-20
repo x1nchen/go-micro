@@ -8,8 +8,6 @@ import (
 	raw "github.com/asim/nitro/app/codec/bytes"
 	"github.com/asim/nitro/app/codec/json"
 	"github.com/asim/nitro/app/codec/jsonrpc"
-	"github.com/asim/nitro/app/codec/proto"
-	"github.com/asim/nitro/app/codec/protorpc"
 	"github.com/asim/nitro/app/errors"
 	"github.com/asim/nitro/app/network"
 	"github.com/asim/nitro/util/buf"
@@ -40,18 +38,13 @@ var (
 	DefaultCodecs = map[string]codec.NewCodec{
 		"application/json":         json.NewCodec,
 		"application/json-rpc":     jsonrpc.NewCodec,
-		"application/protobuf":     proto.NewCodec,
-		"application/proto-rpc":    protorpc.NewCodec,
 		"application/octet-stream": raw.NewCodec,
 	}
 
 	// TODO: remove legacy codec list
 	defaultCodecs = map[string]codec.NewCodec{
-		"application/json":         jsonrpc.NewCodec,
-		"application/json-rpc":     jsonrpc.NewCodec,
-		"application/protobuf":     protorpc.NewCodec,
-		"application/proto-rpc":    protorpc.NewCodec,
-		"application/octet-stream": protorpc.NewCodec,
+		"application/json":     jsonrpc.NewCodec,
+		"application/json-rpc": jsonrpc.NewCodec,
 	}
 
 	// the local buffer pool

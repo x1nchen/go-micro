@@ -18,8 +18,8 @@ func TestRequestOptions(t *testing.T) {
 		t.Fatalf("expected 'endpoint' got %s", r.ContentType())
 	}
 
-	r2 := newRequest("service", "endpoint", nil, "application/json", client.WithContentType("application/protobuf"))
-	if r2.ContentType() != "application/protobuf" {
+	r2 := newRequest("service", "endpoint", nil, "application/octet", client.WithContentType("application/octet"))
+	if r2.ContentType() != "application/octet" {
 		t.Fatalf("expected 'endpoint' got %s", r2.ContentType())
 	}
 }
