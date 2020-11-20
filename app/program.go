@@ -1,8 +1,8 @@
 // Package app encapsulates the client, server and other interfaces to provide a complete dapp
 package app
 
-// App is an interface for distributed apps
-type App interface {
+// Program is an interface for distributed application programming
+type Program interface {
 	// Set the current application name
 	Name(string)
 	// Request an application by name and endpoint
