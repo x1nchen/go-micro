@@ -6,51 +6,22 @@ Nitro (formerly known as Go Micro) is a blazingly fast framework for distributed
 
 ## Overview
 
-Nitro provides the core requirements for distributed app development, IoT, edge and p2p including RPC and Event driven communication. 
+Nitro will provide the core requirements for distributed app development, IoT, edge and p2p including RPC and Event driven communication. 
 The **Nitro** model is in-memory defaults with a pluggable architecture. Blaze with pure in-memory development and swap out as needed 
 to go multi-process or multi-host.
 
-Nitro is formerly Go Micro. Go to [m3o.com](https://m3o.com) for Micro.
-
+Nitro is currently undergoing a complete rewrite and is considered unstable for use.
 
 ## Features
 
-Nitro abstracts away the details of distributed systems. Here are the main features.
+V3 aka Nitro TBD. Focusing on dapps, IoT, edge and p2p. Potential features include.
 
-- **Authentication** - Auth is built in as a first class citizen. Authentication and authorization enable secure 
-zero trust networking by providing every service an identity and certificates. This additionally includes rule 
-based access control.
-
-- **Dynamic Config** - Load and hot reload dynamic config from anywhere. The config interface provides a way to load application 
-level config from any source such as env vars, file, etcd. You can merge the sources and even define fallbacks.
-
-- **Data Storage** - A simple data store interface to read, write and delete records. It includes support for memory, file and 
-CockroachDB by default. State and persistence becomes a core requirement beyond prototyping and Nitro looks to build that into the framework.
-
-- **Service Discovery** - Automatic service registration and name resolution. Service discovery is at the core of micro service 
-development. When service A needs to speak to service B it needs the location of that service. The default discovery mechanism is 
-multicast DNS (mdns), a zeroconf system.
-
-- **Load Balancing** - Client side load balancing built on service discovery. Once we have the addresses of any number of instances 
-of a service we now need a way to decide which node to route to. We use random hashed load balancing to provide even distribution 
-across the services and retry a different node if there's a problem. 
-
-- **Message Encoding** - Dynamic message encoding based on content-type. The client and server will use codecs along with content-type 
-to seamlessly encode and decode Go types for you. Any variety of messages could be encoded and sent from different clients. The client 
-and server handle this by default. This includes protobuf and json by default.
-
-- **RPC Communication** - Synchronous request/response with support for bidirectional streaming. We provide an abstraction for synchronous 
-communication. A request made to a service will be automatically resolved, load balanced, dialled and streamed.
-
-- **Async Messaging** - PubSub is built in as a first class citizen for asynchronous communication and event driven architectures. 
-Event notifications are a core pattern in micro service development. The default messaging system is a HTTP event message broker.
-
-- **Synchronization** - Distributed systems are often built in an eventually consistent manner. Support for distributed locking and 
-leadership are built in as a Sync interface. When using an eventually consistent database or scheduling use the Sync interface.
-
-- **Pluggable Interfaces** - Nitro makes use of Go interfaces for each package. Because of this these interfaces 
-are pluggable and allows Nitro to be runtime agnostic. You can plugin any underlying technology. Find external third party (non stdlib) 
-plugins in [github.com/asim/nitro-plugins](https://github.com/asim/nitro-plugins).
+- Lightweight RPC based communications
+- Event broadcasting and notifications
+- CRDT Data synchronisation and storage
+- Consensus protocol and execution engine
+- WebAssembly target compilation support
+- Unique randomized token generation aka BLS
 
 ## Docs
 
@@ -59,207 +30,6 @@ See [gonitro.dev/docs/v3](https://gonitro.dev/docs/v3/)
 ## Discussion
 
 See [nitro/discussions](https://github.com/asim/nitro/discussions) for any discussions, development, etc
-
-## Usage
-
-Here's how to write a quick Nitro App (completely in-memory including network)
-
-### App
-
-```go
-package main
-
-import (
-        "context"
-
-        "github.com/asim/nitro/app"
-)
-
-// Define a request type
-type Request struct {
-        Name string
-}
-
-// Define a response type
-type Response struct {
-        Message string
-}
-
-// Create your public App Handler
-type Handler struct {}
-
-// Create a public Handler method which takes request, response and returns an error
-func (h *Handler) Call(ctx context.Context, req *Request, rsp *Response) error {
-        rsp.Message = "Hello " + req.Name
-        return nil
-}
-
-func main() {
-        // Create a new App
-        app := app.New()
-
-        // Set the App name
-        app.Name("helloworld")
-
-        // Register the Handler
-        app.Handle(new(Handler))
-
-        // Run the App (blocking call)
-        app.Run()
-}
-```
-
-### Client
-
-
-To call a Nitro App (if in-memory, must be the same process, same app, registry, network, etc)
-
-```go
-var rsp Response
-
-// Call your app (or any other) by name
-err := app.Call("helloworld", "Handler.Call", &Request{Name: "Alice"}, &rsp)
-if err != nil {
-	fmt.Println(err)
-}
-
-fmt.Println(rsp.Message)
-```
-
-### Transport
-
-Use network sockets to communicate across multiple processes
-
-```go
-import (
-	"github.com/asim/nitro/app"
-	"github.com/asim/nitro/app/network/socket"
-)
-
-app.New(
-	app.Transport(socket.NewTransport()),
-)
-```
-
-To set the address (defaults to tcp address :0 otherwise)
-
-```go
-app.New(
-	app.Address("localhost:1234"),
-)
-```
-
-To make use of unix sockets
-
-```go
-app.New(
-	app.Address("unix:///tmp/helloworld.sock"),
-)
-```
-
-### Router
-
-Set the router to static so you can specify the address in calls
-
-```go
-import (
-	"github.com/asim/nitro/app"
-	"github.com/asim/nitro/app/client"
-	"github.com/asim/nitro/app/network/socket"
-	rpcc "github.com/asim/nitro/app/client/rpc"
-	"github.com/asim/nitro/app/router/static"
-)
-
-// set a static router that uses whatever you pass in
-c := rpcc.NewClient(client.Lookup(static.NewRouter()))
-s := socket.NewTransport()
-
-app := app.New(
-	app.Client(c),
-	app.Transport(s),
-)
-
-// call using a fixed address
-app.Call("unix:///tmp/helloworld.sock", "Handler.Call", req, rsp)
-
-// for tcp call the address
-app.Call("localhost:1234", "Handler.Call", req, rsp)
-```
-
-### Registry
-
-Make use of mdns for zero conf service discovery across processes on a single host
-
-```go
-import (
-	"github.com/asim/nitro/app"
-	"github.com/asim/nitro-plugins/registry/mdns/v3"
-)
-
-hw := app.New(
-	app.Registry(mdns.NewRegistry()),
-)
-hw.Name("helloworld")
-```
-
-Simply call the service by name in another process (using mdns there also)
-
-```go
-app.Call("helloworld", "Handler.Call", req, rsp)
-```
-
-### Broadcast
-
-Broadcast and consume messages asynchronously
-
-```go
-package main
-
-import (
-        "context"
-	"fmt"
-
-        "github.com/asim/nitro/app"
-)
-
-// Define a request type
-type Event struct {
-        ID string
-	Message string
-}
-
-// Create your public App Handler
-type Events struct {}
-
-// Create a public Handler method which consumes the message
-func (e *Events) Handler(ctx context.Context, ev *Event) error {
-	fmt.Println("Received event", ev.ID)
-        return nil
-}
-
-func main() {
-        // Create a new App
-        app := app.New()
-
-        // Set the App name
-        app.Name("helloworld")
-
-        // Register the subscriber
-        app.Subscribe("events", new(Events))
-
-        // Run the App (blocking call)
-        app.Run()
-}
-```
-
-The broadcast side
-
-```go
-err := app.Broadcast("events", &Event{
-	ID: "1",
-	Message: "Foo",
-})
-```
 
 ## FAQ
 
