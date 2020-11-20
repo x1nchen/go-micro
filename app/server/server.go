@@ -7,7 +7,7 @@ import (
 
 	"github.com/asim/nitro/app/codec"
 	"github.com/asim/nitro/app/registry"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 // Server is a simple micro server abstraction

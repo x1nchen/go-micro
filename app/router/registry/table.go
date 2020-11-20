@@ -6,7 +6,7 @@ import (
 
 	"github.com/asim/nitro/app/logger"
 	"github.com/asim/nitro/app/router"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 // table is an in-memory routing table

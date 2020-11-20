@@ -16,7 +16,7 @@ import (
 	"github.com/asim/nitro/app/network"
 	"github.com/asim/nitro/util/buf"
 	"github.com/asim/nitro/util/pool"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 type rpcClient struct {

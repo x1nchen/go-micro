@@ -192,7 +192,7 @@ func FromError(err error) *Error {
 
 // Wrap wraps errors
 func Wrap(err error, msg string) error {
-	return fmt.Errorf(`%s: %s"`, msg, err.Error())
+	return fmt.Errorf(`%s: %s`, msg, err.Error())
 }
 
 func Wrapf(err error, format string, args ...interface{}) error {

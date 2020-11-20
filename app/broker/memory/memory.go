@@ -11,7 +11,7 @@ import (
 	"github.com/asim/nitro/app/broker"
 	maddr "github.com/asim/nitro/util/addr"
 	mnet "github.com/asim/nitro/util/net"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 type memoryBroker struct {

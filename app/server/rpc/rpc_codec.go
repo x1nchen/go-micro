@@ -11,9 +11,9 @@ import (
 	"github.com/asim/nitro/app/codec/jsonrpc"
 	"github.com/asim/nitro/app/codec/proto"
 	"github.com/asim/nitro/app/codec/protorpc"
+	"github.com/asim/nitro/app/errors"
 	"github.com/asim/nitro/app/network"
 	"github.com/asim/nitro/util/buf"
-	"github.com/pkg/errors"
 )
 
 type rpcCodec struct {

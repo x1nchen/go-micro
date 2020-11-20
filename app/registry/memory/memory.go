@@ -8,7 +8,7 @@ import (
 
 	"github.com/asim/nitro/app/logger"
 	"github.com/asim/nitro/app/registry"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 var (

@@ -2,7 +2,7 @@ package noop
 
 import (
 	"github.com/asim/nitro/app/auth"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 func NewAuth(opts ...auth.Option) auth.Auth {

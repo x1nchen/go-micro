@@ -5,7 +5,7 @@ import (
 
 	"github.com/asim/nitro/app/registry"
 	"github.com/asim/nitro/app/registry/memory"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 // Options are router options

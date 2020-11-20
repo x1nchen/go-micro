@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/asim/nitro/app/network"
-	"github.com/google/uuid"
+	"github.com/asim/nitro/util/uuid"
 )
 
 type pool struct {
