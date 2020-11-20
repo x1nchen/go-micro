@@ -3,8 +3,6 @@ package auth
 import (
 	"context"
 	"time"
-
-	"github.com/asim/nitro/app/store"
 )
 
 func NewOptions(opts ...Option) Options {
@@ -30,11 +28,9 @@ type Options struct {
 	PrivateKey string
 	// LoginURL is the relative url path where a user can login
 	LoginURL string
-	// Store to back auth
-	Store store.Store
 	// Addrs sets the addresses of auth
 	Addrs []string
-	// Context to store other options
+	// Context to db.other options
 	Context context.Context
 }
 
@@ -51,13 +47,6 @@ func Addrs(addrs ...string) Option {
 func Issuer(i string) Option {
 	return func(o *Options) {
 		o.Issuer = i
-	}
-}
-
-// Store to back auth
-func Store(s store.Store) Option {
-	return func(o *Options) {
-		o.Store = s
 	}
 }
 

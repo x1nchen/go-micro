@@ -3,9 +3,9 @@ package app
 import (
 	"context"
 
-	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/client"
 	rpcClient "github.com/asim/nitro/app/client/rpc"
+	mevent "github.com/asim/nitro/app/event/memory"
 	tmem "github.com/asim/nitro/app/network/memory"
 	"github.com/asim/nitro/app/registry/memory"
 	"github.com/asim/nitro/app/server"

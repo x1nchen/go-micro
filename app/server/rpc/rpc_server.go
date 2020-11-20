@@ -12,9 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/codec"
 	raw "github.com/asim/nitro/app/codec/bytes"
+	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/logger"
 	"github.com/asim/nitro/app/metadata"
 	"github.com/asim/nitro/app/network"

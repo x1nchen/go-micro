@@ -1,8 +1,8 @@
 package rpc
 
 import (
-	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/codec"
+	mevent "github.com/asim/nitro/app/event/memory"
 	tmem "github.com/asim/nitro/app/network/memory"
 	"github.com/asim/nitro/app/registry/memory"
 	"github.com/asim/nitro/app/server"

@@ -7,11 +7,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/client"
 	"github.com/asim/nitro/app/codec"
 	raw "github.com/asim/nitro/app/codec/bytes"
 	"github.com/asim/nitro/app/errors"
+	"github.com/asim/nitro/app/event"
 	"github.com/asim/nitro/app/metadata"
 	"github.com/asim/nitro/app/network"
 	"github.com/asim/nitro/util/buf"
