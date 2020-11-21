@@ -26,7 +26,7 @@ Now focusing on dapps, IoT, edge and p2p. Features include:
 
 ## Docs
 
-See [gonitro.dev/docs/v3](https://gonitro.dev/docs/v3/)
+See [gonitro.dev/docs/](https://gonitro.dev/docs/)
 
 ## Discussion
 
