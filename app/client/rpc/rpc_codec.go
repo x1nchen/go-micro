@@ -85,16 +85,16 @@ func getHeaders(m *codec.Message) {
 	}
 
 	// check error in header
-	m.Error = set(m.Error, "Nitro-Error")
+	m.Error = set(m.Error, "Error")
 
 	// check endpoint in header
-	m.Endpoint = set(m.Endpoint, "Nitro-Endpoint")
+	m.Endpoint = set(m.Endpoint, "Endpoint")
 
 	// check method in header
-	m.Method = set(m.Method, "Nitro-Method")
+	m.Method = set(m.Method, "Method")
 
 	// set the request id
-	m.Id = set(m.Id, "Nitro-Id")
+	m.Id = set(m.Id, "Id")
 }
 
 func setHeaders(m *codec.Message, stream string) {
@@ -105,14 +105,14 @@ func setHeaders(m *codec.Message, stream string) {
 		m.Header[hdr] = v
 	}
 
-	set("Nitro-Id", m.Id)
-	set("Nitro-Service", m.Target)
-	set("Nitro-Method", m.Method)
-	set("Nitro-Endpoint", m.Endpoint)
-	set("Nitro-Error", m.Error)
+	set("Id", m.Id)
+	set("Service", m.Target)
+	set("Method", m.Method)
+	set("Endpoint", m.Endpoint)
+	set("Error", m.Error)
 
 	if len(stream) > 0 {
-		set("Nitro-Stream", stream)
+		set("Stream", stream)
 	}
 }
 
@@ -124,7 +124,7 @@ func setupProtocol(msg *network.Message, node *registry.Node) codec.NewCodec {
 	}
 
 	// processing topic publishing
-	if len(msg.Header["Nitro-Topic"]) > 0 {
+	if len(msg.Header["Topic"]) > 0 {
 		return nil
 	}
 

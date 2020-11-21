@@ -82,11 +82,11 @@ func getHeaders(m *codec.Message) {
 		return m.Header[hdr]
 	}
 
-	m.Id = set(m.Id, "Nitro-Id")
-	m.Error = set(m.Error, "Nitro-Error")
-	m.Endpoint = set(m.Endpoint, "Nitro-Endpoint")
-	m.Method = set(m.Method, "Nitro-Method")
-	m.Target = set(m.Target, "Nitro-Service")
+	m.Id = set(m.Id, "Id")
+	m.Error = set(m.Error, "Error")
+	m.Endpoint = set(m.Endpoint, "Endpoint")
+	m.Method = set(m.Method, "Method")
+	m.Target = set(m.Target, "Service")
 
 	// TODO: remove this cruft
 	if len(m.Endpoint) == 0 {
@@ -104,21 +104,21 @@ func setHeaders(m, r *codec.Message) {
 	}
 
 	// set headers
-	set("Nitro-Id", r.Id)
-	set("Nitro-Service", r.Target)
-	set("Nitro-Method", r.Method)
-	set("Nitro-Endpoint", r.Endpoint)
-	set("Nitro-Error", r.Error)
+	set("Id", r.Id)
+	set("Service", r.Target)
+	set("Method", r.Method)
+	set("Endpoint", r.Endpoint)
+	set("Error", r.Error)
 }
 
 // setupProtocol sets up the old protocol
 func setupProtocol(msg *network.Message) codec.NewCodec {
-	service := getHeader("Nitro-Service", msg.Header)
-	method := getHeader("Nitro-Method", msg.Header)
-	endpoint := getHeader("Nitro-Endpoint", msg.Header)
-	protocol := getHeader("Nitro-Protocol", msg.Header)
-	target := getHeader("Nitro-Target", msg.Header)
-	topic := getHeader("Nitro-Topic", msg.Header)
+	service := getHeader("Service", msg.Header)
+	method := getHeader("Method", msg.Header)
+	endpoint := getHeader("Endpoint", msg.Header)
+	protocol := getHeader("Protocol", msg.Header)
+	target := getHeader("Target", msg.Header)
+	topic := getHeader("Topic", msg.Header)
 
 	// if the protocol exists (rpc) do nothing
 	if len(protocol) > 0 {
@@ -142,12 +142,12 @@ func setupProtocol(msg *network.Message) codec.NewCodec {
 
 	// no method then set to endpoint
 	if len(method) == 0 {
-		msg.Header["Nitro-Method"] = endpoint
+		msg.Header["Method"] = endpoint
 	}
 
 	// no endpoint then set to method
 	if len(endpoint) == 0 {
-		msg.Header["Nitro-Endpoint"] = method
+		msg.Header["Endpoint"] = method
 	}
 
 	return nil
@@ -304,7 +304,7 @@ func (c *rpcCodec) Write(r *codec.Message, b interface{}) error {
 
 		// write an error if it failed
 		m.Error = errors.Wrapf(err, "Unable to encode body").Error()
-		m.Header["Nitro-Error"] = m.Error
+		m.Header["Error"] = m.Error
 		// no body to write
 		if err := c.codec.Write(m, nil); err != nil {
 			return err

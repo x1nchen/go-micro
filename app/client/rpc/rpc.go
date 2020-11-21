@@ -71,9 +71,9 @@ func (r *rpcClient) call(ctx context.Context, addr string, req client.Request, r
 	md, ok := metadata.FromContext(ctx)
 	if ok {
 		for k, v := range md {
-			// don't copy Nitro-Topic header, that used for pub/sub
+			// don't copy Topic header, that used for pub/sub
 			// this fix case then client uses the same context that received in subscriber
-			if k == "Nitro-Topic" {
+			if k == "Topic" {
 				continue
 			}
 			msg.Header[k] = v
@@ -559,8 +559,8 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 
 	id := uuid.New().String()
 	md["Content-Type"] = msg.ContentType()
-	md["Nitro-Topic"] = msg.Topic()
-	md["Nitro-Id"] = id
+	md["Topic"] = msg.Topic()
+	md["Id"] = id
 
 	// set the topic
 	topic := msg.Topic()
@@ -589,8 +589,8 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 			Target: topic,
 			Type:   codec.Event,
 			Header: map[string]string{
-				"Nitro-Id":    id,
-				"Nitro-Topic": msg.Topic(),
+				"Id":    id,
+				"Topic": msg.Topic(),
 			},
 		}, msg.Payload()); err != nil {
 			return errors.InternalServerError("nitro", err.Error())
