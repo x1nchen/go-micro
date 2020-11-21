@@ -25,7 +25,7 @@ type Message struct {
 
 // Subscriber is a convenience return type for the Subscribe method
 type Subscriber interface {
-	Options() SubscribeOptions
 	Event() string
+	Options() SubscribeOptions
 	Unsubscribe() error
 }
