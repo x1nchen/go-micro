@@ -1,4 +1,4 @@
-// Package auth provides authentication and authorization capability
+// Package crypto provides authentication and authorization capability
 package crypto
 
 import (
