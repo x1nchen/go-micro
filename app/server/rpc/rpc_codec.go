@@ -82,11 +82,11 @@ func getHeaders(m *codec.Message) {
 		return m.Header[hdr]
 	}
 
-	m.Id = set(m.Id, "Micro-Id")
-	m.Error = set(m.Error, "Micro-Error")
-	m.Endpoint = set(m.Endpoint, "Micro-Endpoint")
-	m.Method = set(m.Method, "Micro-Method")
-	m.Target = set(m.Target, "Micro-Service")
+	m.Id = set(m.Id, "Nitro-Id")
+	m.Error = set(m.Error, "Nitro-Error")
+	m.Endpoint = set(m.Endpoint, "Nitro-Endpoint")
+	m.Method = set(m.Method, "Nitro-Method")
+	m.Target = set(m.Target, "Nitro-Service")
 
 	// TODO: remove this cruft
 	if len(m.Endpoint) == 0 {
@@ -104,21 +104,21 @@ func setHeaders(m, r *codec.Message) {
 	}
 
 	// set headers
-	set("Micro-Id", r.Id)
-	set("Micro-Service", r.Target)
-	set("Micro-Method", r.Method)
-	set("Micro-Endpoint", r.Endpoint)
-	set("Micro-Error", r.Error)
+	set("Nitro-Id", r.Id)
+	set("Nitro-Service", r.Target)
+	set("Nitro-Method", r.Method)
+	set("Nitro-Endpoint", r.Endpoint)
+	set("Nitro-Error", r.Error)
 }
 
 // setupProtocol sets up the old protocol
 func setupProtocol(msg *network.Message) codec.NewCodec {
-	service := getHeader("Micro-Service", msg.Header)
-	method := getHeader("Micro-Method", msg.Header)
-	endpoint := getHeader("Micro-Endpoint", msg.Header)
-	protocol := getHeader("Micro-Protocol", msg.Header)
-	target := getHeader("Micro-Target", msg.Header)
-	topic := getHeader("Micro-Topic", msg.Header)
+	service := getHeader("Nitro-Service", msg.Header)
+	method := getHeader("Nitro-Method", msg.Header)
+	endpoint := getHeader("Nitro-Endpoint", msg.Header)
+	protocol := getHeader("Nitro-Protocol", msg.Header)
+	target := getHeader("Nitro-Target", msg.Header)
+	topic := getHeader("Nitro-Topic", msg.Header)
 
 	// if the protocol exists (rpc) do nothing
 	if len(protocol) > 0 {
@@ -142,12 +142,12 @@ func setupProtocol(msg *network.Message) codec.NewCodec {
 
 	// no method then set to endpoint
 	if len(method) == 0 {
-		msg.Header["Micro-Method"] = endpoint
+		msg.Header["Nitro-Method"] = endpoint
 	}
 
 	// no endpoint then set to method
 	if len(endpoint) == 0 {
-		msg.Header["Micro-Endpoint"] = method
+		msg.Header["Nitro-Endpoint"] = method
 	}
 
 	return nil
@@ -304,7 +304,7 @@ func (c *rpcCodec) Write(r *codec.Message, b interface{}) error {
 
 		// write an error if it failed
 		m.Error = errors.Wrapf(err, "Unable to encode body").Error()
-		m.Header["Micro-Error"] = m.Error
+		m.Header["Nitro-Error"] = m.Error
 		// no body to write
 		if err := c.codec.Write(m, nil); err != nil {
 			return err

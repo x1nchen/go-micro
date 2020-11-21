@@ -110,11 +110,11 @@ func (s *rpcServer) HandleEvent(msg *event.Message) error {
 	ctx := metadata.NewContext(context.Background(), hdr)
 
 	// TODO: inspect message header
-	// Micro-Service means a request
-	// Micro-Topic means a message
+	// Nitro-Service means a request
+	// Nitro-Topic means a message
 
 	rpcMsg := &rpcMessage{
-		topic:       msg.Header["Micro-Topic"],
+		topic:       msg.Header["Nitro-Topic"],
 		contentType: ct,
 		payload:     &raw.Frame{Data: msg.Body},
 		codec:       cf,
@@ -144,7 +144,7 @@ func (s *rpcServer) HandleEvent(msg *event.Message) error {
 
 // ServeConn serves a single connection
 func (s *rpcServer) ServeConn(sock network.Socket) {
-	// streams are multiplexed on Micro-Stream or Micro-Id header
+	// streams are multiplexed on Nitro-Stream or Nitro-Id header
 	pool := socket.NewPool()
 
 	// get global waitgroup
@@ -184,12 +184,12 @@ func (s *rpcServer) ServeConn(sock network.Socket) {
 		}
 
 		// check the message header for
-		// Micro-Service is a request
-		// Micro-Topic is a message
-		if t := msg.Header["Micro-Topic"]; len(t) > 0 {
+		// Nitro-Service is a request
+		// Nitro-Topic is a message
+		if t := msg.Header["Nitro-Topic"]; len(t) > 0 {
 			// TODO: handle the error event
 			if err := s.HandleEvent(newMessage(msg)); err != nil {
-				msg.Header["Micro-Error"] = err.Error()
+				msg.Header["Nitro-Error"] = err.Error()
 			}
 			// write back some 200
 			if err := sock.Send(&network.Message{
@@ -203,21 +203,21 @@ func (s *rpcServer) ServeConn(sock network.Socket) {
 
 		// business as usual
 
-		// use Micro-Stream as the stream identifier
+		// use Nitro-Stream as the stream identifier
 		// in the event its blank we'll always process
 		// on the same socket
-		id := msg.Header["Micro-Stream"]
+		id := msg.Header["Nitro-Stream"]
 
 		// if there's no stream id then its a standard request
-		// use the Micro-Id
+		// use the Nitro-Id
 		if len(id) == 0 {
-			id = msg.Header["Micro-Id"]
+			id = msg.Header["Nitro-Id"]
 		}
 
 		// check stream id
 		var stream bool
 
-		if v := getHeader("Micro-Stream", msg.Header); len(v) > 0 {
+		if v := getHeader("Nitro-Stream", msg.Header); len(v) > 0 {
 			stream = true
 		}
 
@@ -227,7 +227,7 @@ func (s *rpcServer) ServeConn(sock network.Socket) {
 		// if we don't have a socket and its a stream
 		if !ok && stream {
 			// check if its a last stream EOS error
-			err := msg.Header["Micro-Error"]
+			err := msg.Header["Nitro-Error"]
 			if err == lastStreamResponseError.Error() {
 				pool.Release(psock)
 				continue
@@ -325,9 +325,9 @@ func (s *rpcServer) ServeConn(sock network.Socket) {
 
 		// internal request
 		request := &rpcRequest{
-			service:     getHeader("Micro-Service", msg.Header),
-			method:      getHeader("Micro-Method", msg.Header),
-			endpoint:    getHeader("Micro-Endpoint", msg.Header),
+			service:     getHeader("Nitro-Service", msg.Header),
+			method:      getHeader("Nitro-Method", msg.Header),
+			endpoint:    getHeader("Nitro-Endpoint", msg.Header),
 			contentType: ct,
 			codec:       rcodec,
 			header:      msg.Header,
