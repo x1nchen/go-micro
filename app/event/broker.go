@@ -8,12 +8,12 @@ type Broker interface {
 	Address() string
 	Connect() error
 	Disconnect() error
-	Publish(topic string, m *Message, opts ...PublishOption) error
-	Subscribe(topic string, h Handler, opts ...SubscribeOption) (Subscriber, error)
+	Publish(event string, m *Message, opts ...PublishOption) error
+	Subscribe(event string, h Handler, opts ...SubscribeOption) (Subscriber, error)
 	String() string
 }
 
-// Handler is used to process messages via a subscription of a topic.
+// Handler is used to process messages via a subscription of a event.
 type Handler func(*Message) error
 
 type ErrorHandler func(*Message, error)
@@ -26,6 +26,6 @@ type Message struct {
 // Subscriber is a convenience return type for the Subscribe method
 type Subscriber interface {
 	Options() SubscribeOptions
-	Topic() string
+	Event() string
 	Unsubscribe() error
 }

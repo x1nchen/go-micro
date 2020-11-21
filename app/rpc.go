@@ -41,8 +41,8 @@ func (s *rpcApp) Execute(name, ep string, req, rsp interface{}) error {
 	return s.Client().Call(context.Background(), r, rsp)
 }
 
-func (s *rpcApp) Broadcast(topic string, msg interface{}) error {
-	m := s.Client().NewMessage(topic, msg)
+func (s *rpcApp) Broadcast(event string, msg interface{}) error {
+	m := s.Client().NewMessage(event, msg)
 	return s.Client().Publish(context.Background(), m)
 }
 
@@ -51,8 +51,8 @@ func (s *rpcApp) Register(v interface{}) error {
 	return s.Server().Handle(h)
 }
 
-func (s *rpcApp) Subscribe(topic string, v interface{}) error {
-	sub := s.Server().NewSubscriber(topic, v)
+func (s *rpcApp) Subscribe(event string, v interface{}) error {
+	sub := s.Server().NewSubscriber(event, v)
 	return s.Server().Subscribe(sub)
 }
 

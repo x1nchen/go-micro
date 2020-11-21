@@ -71,9 +71,9 @@ func (r *rpcClient) call(ctx context.Context, addr string, req client.Request, r
 	md, ok := metadata.FromContext(ctx)
 	if ok {
 		for k, v := range md {
-			// don't copy Topic header, that used for pub/sub
+			// don't copy Event header, that used for pub/sub
 			// this fix case then client uses the same context that received in subscriber
-			if k == "Topic" {
+			if k == "Event" {
 				continue
 			}
 			msg.Header[k] = v
@@ -558,15 +558,15 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 
 	id := uuid.New().String()
 	md["Content-Type"] = msg.ContentType()
-	md["Topic"] = msg.Topic()
+	md["Event"] = msg.Event()
 	md["Id"] = id
 
-	// set the topic
-	topic := msg.Topic()
+	// set the event
+	ev := msg.Event()
 
 	// get the exchange
 	if len(options.Exchange) > 0 {
-		topic = options.Exchange
+		ev = options.Exchange
 	}
 
 	// encode message body
@@ -585,11 +585,11 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 		b := buf.New(nil)
 
 		if err := cf(b).Write(&codec.Message{
-			Target: topic,
+			Target: ev,
 			Type:   codec.Event,
 			Header: map[string]string{
 				"Id":    id,
-				"Topic": msg.Topic(),
+				"Event": msg.Event(),
 			},
 		}, msg.Payload()); err != nil {
 			return errors.InternalServerError("nitro", err.Error())
@@ -606,14 +606,14 @@ func (r *rpcClient) Publish(ctx context.Context, msg client.Message, opts ...cli
 		r.once.Store(true)
 	}
 
-	return r.opts.Broker.Publish(topic, &event.Message{
+	return r.opts.Broker.Publish(ev, &event.Message{
 		Header: md,
 		Body:   body,
 	}, event.PublishContext(options.Context))
 }
 
-func (r *rpcClient) NewMessage(topic string, message interface{}, opts ...client.MessageOption) client.Message {
-	return newMessage(topic, message, r.opts.ContentType, opts...)
+func (r *rpcClient) NewMessage(event string, message interface{}, opts ...client.MessageOption) client.Message {
+	return newMessage(event, message, r.opts.ContentType, opts...)
 }
 
 func (r *rpcClient) NewRequest(service, method string, request interface{}, reqOpts ...client.RequestOption) client.Request {

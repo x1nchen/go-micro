@@ -16,7 +16,7 @@ type Selector interface {
 	Select([]string, ...SelectOption) (Next, error)
 }
 
-type SelectorOptions struct {}
+type SelectorOptions struct{}
 
 type SelectOption func(o *SelectorOptions)
 

@@ -25,7 +25,7 @@ type memoryBroker struct {
 
 type memorySubscriber struct {
 	id      string
-	topic   string
+	event   string
 	exit    chan bool
 	handler event.Handler
 	opts    event.SubscribeOptions
@@ -82,14 +82,14 @@ func (m *memoryBroker) Init(opts ...event.Option) error {
 	return nil
 }
 
-func (m *memoryBroker) Publish(topic string, msg *event.Message, opts ...event.PublishOption) error {
+func (m *memoryBroker) Publish(ev string, msg *event.Message, opts ...event.PublishOption) error {
 	m.RLock()
 	if !m.connected {
 		m.RUnlock()
 		return errors.New("not connected")
 	}
 
-	subs, ok := m.Subscribers[topic]
+	subs, ok := m.Subscribers[ev]
 	m.RUnlock()
 	if !ok {
 		return nil
@@ -107,7 +107,7 @@ func (m *memoryBroker) Publish(topic string, msg *event.Message, opts ...event.P
 	return nil
 }
 
-func (m *memoryBroker) Subscribe(topic string, handler event.Handler, opts ...event.SubscribeOption) (event.Subscriber, error) {
+func (m *memoryBroker) Subscribe(ev string, handler event.Handler, opts ...event.SubscribeOption) (event.Subscriber, error) {
 	m.RLock()
 	if !m.connected {
 		m.RUnlock()
@@ -123,26 +123,26 @@ func (m *memoryBroker) Subscribe(topic string, handler event.Handler, opts ...ev
 	sub := &memorySubscriber{
 		exit:    make(chan bool, 1),
 		id:      uuid.New().String(),
-		topic:   topic,
+		event:   ev,
 		handler: handler,
 		opts:    options,
 	}
 
 	m.Lock()
-	m.Subscribers[topic] = append(m.Subscribers[topic], sub)
+	m.Subscribers[ev] = append(m.Subscribers[ev], sub)
 	m.Unlock()
 
 	go func() {
 		<-sub.exit
 		m.Lock()
 		var newSubscribers []*memorySubscriber
-		for _, sb := range m.Subscribers[topic] {
+		for _, sb := range m.Subscribers[ev] {
 			if sb.id == sub.id {
 				continue
 			}
 			newSubscribers = append(newSubscribers, sb)
 		}
-		m.Subscribers[topic] = newSubscribers
+		m.Subscribers[ev] = newSubscribers
 		m.Unlock()
 	}()
 
@@ -157,8 +157,8 @@ func (m *memorySubscriber) Options() event.SubscribeOptions {
 	return m.opts
 }
 
-func (m *memorySubscriber) Topic() string {
-	return m.topic
+func (m *memorySubscriber) Event() string {
+	return m.event
 }
 
 func (m *memorySubscriber) Unsubscribe() error {

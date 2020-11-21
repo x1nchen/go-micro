@@ -123,8 +123,8 @@ func setupProtocol(msg *network.Message, node *registry.Node) codec.NewCodec {
 		return nil
 	}
 
-	// processing topic publishing
-	if len(msg.Header["Topic"]) > 0 {
+	// processing event publishing
+	if len(msg.Header["Event"]) > 0 {
 		return nil
 	}
 

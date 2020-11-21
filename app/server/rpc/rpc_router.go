@@ -477,8 +477,8 @@ func (router *router) ServeRequest(ctx context.Context, r server.Request, rsp se
 	return service.call(ctx, router, sending, mtype, req, argv, replyv, rsp.Codec())
 }
 
-func (router *router) NewSubscriber(topic string, handler interface{}, opts ...server.SubscriberOption) server.Subscriber {
-	return newSubscriber(topic, handler, opts...)
+func (router *router) NewSubscriber(event string, handler interface{}, opts ...server.SubscriberOption) server.Subscriber {
+	return newSubscriber(event, handler, opts...)
 }
 
 func (router *router) Subscribe(s server.Subscriber) error {
@@ -498,9 +498,9 @@ func (router *router) Subscribe(s server.Subscriber) error {
 	defer router.su.Unlock()
 
 	// append to subscribers
-	subs := router.subscribers[sub.Topic()]
+	subs := router.subscribers[sub.Event()]
 	subs = append(subs, sub)
-	router.subscribers[sub.Topic()] = subs
+	router.subscribers[sub.Event()] = subs
 
 	return nil
 }
@@ -520,8 +520,8 @@ func (router *router) ProcessMessage(ctx context.Context, msg server.Message) (e
 	}()
 
 	router.su.RLock()
-	// get the subscribers by topic
-	subs, ok := router.subscribers[msg.Topic()]
+	// get the subscribers by event
+	subs, ok := router.subscribers[msg.Event()]
 	// unlock since we only need to get the subs
 	router.su.RUnlock()
 	if !ok {
@@ -530,7 +530,7 @@ func (router *router) ProcessMessage(ctx context.Context, msg server.Message) (e
 
 	var errResults []string
 
-	// we may have multiple subscribers for the topic
+	// we may have multiple subscribers for the event
 	for _, sub := range subs {
 		// we may have multiple handlers per subscriber
 		for i := 0; i < len(sub.handlers); i++ {
@@ -593,7 +593,7 @@ func (router *router) ProcessMessage(ctx context.Context, msg server.Message) (e
 
 			// create new rpc message
 			rpcMsg := &rpcMessage{
-				topic:       msg.Topic(),
+				event:       msg.Event(),
 				contentType: msg.ContentType(),
 				payload:     req.Interface(),
 				codec:       msg.(*rpcMessage).codec,

@@ -14,7 +14,7 @@ import (
 type Client interface {
 	Init(...Option) error
 	Options() Options
-	NewMessage(topic string, msg interface{}, opts ...MessageOption) Message
+	NewMessage(event string, msg interface{}, opts ...MessageOption) Message
 	NewRequest(service, endpoint string, req interface{}, reqOpts ...RequestOption) Request
 	Call(ctx context.Context, req Request, rsp interface{}, opts ...CallOption) error
 	Stream(ctx context.Context, req Request, opts ...CallOption) (Stream, error)
@@ -24,7 +24,7 @@ type Client interface {
 
 // Message is the interface for publishing asynchronously
 type Message interface {
-	Topic() string
+	Event() string
 	Payload() interface{}
 	ContentType() string
 }

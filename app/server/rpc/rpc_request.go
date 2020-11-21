@@ -23,7 +23,7 @@ type rpcRequest struct {
 }
 
 type rpcMessage struct {
-	topic       string
+	event       string
 	contentType string
 	payload     interface{}
 	header      map[string]string
@@ -85,8 +85,8 @@ func (r *rpcMessage) ContentType() string {
 	return r.contentType
 }
 
-func (r *rpcMessage) Topic() string {
-	return r.topic
+func (r *rpcMessage) Event() string {
+	return r.event
 }
 
 func (r *rpcMessage) Payload() interface{} {

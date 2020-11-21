@@ -42,8 +42,8 @@ type Router interface {
 
 // Message is an async message interface
 type Message interface {
-	// Topic of the message
-	Topic() string
+	// Event of the message
+	Event() string
 	// The decoded payload value
 	Payload() interface{}
 	// The content type of the payload
@@ -120,11 +120,11 @@ type Handler interface {
 	Options() HandlerOptions
 }
 
-// Subscriber interface represents a subscription to a given topic using
+// Subscriber interface represents a subscription to a given event using
 // a specific subscriber function or object with endpoints. It mirrors
 // the handler in its behaviour.
 type Subscriber interface {
-	Topic() string
+	Event() string
 	Subscriber() interface{}
 	Endpoints() []*registry.Endpoint
 	Options() SubscriberOptions

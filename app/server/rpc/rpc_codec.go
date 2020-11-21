@@ -118,7 +118,7 @@ func setupProtocol(msg *network.Message) codec.NewCodec {
 	endpoint := getHeader("Endpoint", msg.Header)
 	protocol := getHeader("Protocol", msg.Header)
 	target := getHeader("Target", msg.Header)
-	topic := getHeader("Topic", msg.Header)
+	event := getHeader("Event", msg.Header)
 
 	// if the protocol exists (rpc) do nothing
 	if len(protocol) > 0 {
@@ -126,7 +126,7 @@ func setupProtocol(msg *network.Message) codec.NewCodec {
 	}
 
 	// newer method of processing messages over network
-	if len(topic) > 0 {
+	if len(event) > 0 {
 		return nil
 	}
 

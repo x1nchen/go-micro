@@ -111,10 +111,10 @@ func (s *rpcServer) HandleEvent(msg *event.Message) error {
 
 	// TODO: inspect message header
 	// Service means a request
-	// Topic means a message
+	// Event means a message
 
 	rpcMsg := &rpcMessage{
-		topic:       msg.Header["Topic"],
+		event:       msg.Header["Event"],
 		contentType: ct,
 		payload:     &raw.Frame{Data: msg.Body},
 		codec:       cf,
@@ -185,8 +185,8 @@ func (s *rpcServer) ServeConn(sock network.Socket) {
 
 		// check the message header for
 		// Service is a request
-		// Topic is a message
-		if t := msg.Header["Topic"]; len(t) > 0 {
+		// Event is a message
+		if t := msg.Header["Event"]; len(t) > 0 {
 			// TODO: handle the error event
 			if err := s.HandleEvent(newMessage(msg)); err != nil {
 				msg.Header["Error"] = err.Error()
@@ -495,8 +495,8 @@ func (s *rpcServer) Handle(h server.Handler) error {
 	return nil
 }
 
-func (s *rpcServer) NewSubscriber(topic string, sb interface{}, opts ...server.SubscriberOption) server.Subscriber {
-	return s.router.NewSubscriber(topic, sb, opts...)
+func (s *rpcServer) NewSubscriber(event string, sb interface{}, opts ...server.SubscriberOption) server.Subscriber {
+	return s.router.NewSubscriber(event, sb, opts...)
 }
 
 func (s *rpcServer) Subscribe(sb server.Subscriber) error {
@@ -631,7 +631,7 @@ func (s *rpcServer) Register() error {
 	}
 
 	sort.Slice(subscriberList, func(i, j int) bool {
-		return subscriberList[i].Topic() > subscriberList[j].Topic()
+		return subscriberList[i].Event() > subscriberList[j].Event()
 	})
 
 	endpoints := make([]*registry.Endpoint, 0, len(handlerList)+len(subscriberList))
@@ -680,7 +680,7 @@ func (s *rpcServer) Register() error {
 
 	// router can exchange messages
 	if s.opts.Router != nil {
-		// subscribe to the topic with own name
+		// subscribe to the event with own name
 		sub, err := s.opts.Broker.Subscribe(config.Name, s.HandleEvent)
 		if err != nil {
 			return err
@@ -701,12 +701,12 @@ func (s *rpcServer) Register() error {
 			opts = append(opts, event.SubscribeContext(cx))
 		}
 
-		sub, err := config.Broker.Subscribe(sb.Topic(), s.HandleEvent, opts...)
+		sub, err := config.Broker.Subscribe(sb.Event(), s.HandleEvent, opts...)
 		if err != nil {
 			return err
 		}
 		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-			log.Infof("Subscribing to topic: %s", sub.Topic())
+			log.Infof("Subscribing to event: %s", sub.Event())
 		}
 		s.subscribers[sb] = []event.Subscriber{sub}
 	}
@@ -797,7 +797,7 @@ func (s *rpcServer) Deregister() error {
 	for sb, subs := range s.subscribers {
 		for _, sub := range subs {
 			if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-				log.Infof("Unsubscribing %s from topic: %s", node.Id, sub.Topic())
+				log.Infof("Unsubscribing %s from event: %s", node.Id, sub.Event())
 			}
 			sub.Unsubscribe()
 		}

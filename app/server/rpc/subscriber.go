@@ -21,7 +21,7 @@ type handler struct {
 }
 
 type subscriber struct {
-	topic      string
+	event      string
 	rcvr       reflect.Value
 	typ        reflect.Type
 	subscriber interface{}
@@ -37,7 +37,7 @@ func newMessage(msg network.Message) *event.Message {
 	}
 }
 
-func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOption) server.Subscriber {
+func newSubscriber(event string, sub interface{}, opts ...server.SubscriberOption) server.Subscriber {
 	options := server.SubscriberOptions{
 		AutoAck: true,
 	}
@@ -68,7 +68,7 @@ func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOptio
 			Name:    "Func",
 			Request: extractSubValue(typ),
 			Metadata: map[string]string{
-				"topic":      topic,
+				"event":      event,
 				"subscriber": "true",
 			},
 		})
@@ -96,7 +96,7 @@ func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOptio
 				Name:    name + "." + method.Name,
 				Request: extractSubValue(method.Type),
 				Metadata: map[string]string{
-					"topic":      topic,
+					"event":      event,
 					"subscriber": "true",
 				},
 			})
@@ -106,7 +106,7 @@ func newSubscriber(topic string, sub interface{}, opts ...server.SubscriberOptio
 	return &subscriber{
 		rcvr:       reflect.ValueOf(sub),
 		typ:        reflect.TypeOf(sub),
-		topic:      topic,
+		event:      event,
 		subscriber: sub,
 		handlers:   handlers,
 		endpoints:  endpoints,
@@ -168,8 +168,8 @@ func validateSubscriber(sub server.Subscriber) error {
 	return nil
 }
 
-func (s *subscriber) Topic() string {
-	return s.topic
+func (s *subscriber) Event() string {
+	return s.event
 }
 
 func (s *subscriber) Subscriber() interface{} {
