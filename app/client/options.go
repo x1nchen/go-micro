@@ -12,8 +12,6 @@ import (
 	"github.com/asim/nitro/app/registry"
 	"github.com/asim/nitro/app/router"
 	regRouter "github.com/asim/nitro/app/router/registry"
-	"github.com/asim/nitro/app/selector"
-	"github.com/asim/nitro/app/selector/roundrobin"
 )
 
 type Options struct {
@@ -26,7 +24,7 @@ type Options struct {
 	Broker    event.Broker
 	Codecs    map[string]codec.NewCodec
 	Router    router.Router
-	Selector  selector.Selector
+	Selector  router.Selector
 	Transport network.Transport
 
 	// Lookup used for looking up routes
@@ -63,9 +61,9 @@ type CallOptions struct {
 	// Router to use for this call
 	Router router.Router
 	// Selector to use for the call
-	Selector selector.Selector
+	Selector router.Selector
 	// SelectOptions to use when selecting a route
-	SelectOptions []selector.SelectOption
+	SelectOptions []router.SelectOption
 	// Stream timeout for the stream
 	StreamTimeout time.Duration
 	// Use the auth token as the authorization header
@@ -119,7 +117,7 @@ func NewOptions(options ...Option) Options {
 		PoolTTL:   DefaultPoolTTL,
 		Broker:    mevent.NewBroker(),
 		Router:    regRouter.NewRouter(),
-		Selector:  roundrobin.NewSelector(),
+		Selector:  new(router.RoundRobin),
 		Transport: tmem.NewTransport(),
 	}
 
@@ -194,7 +192,7 @@ func Router(r router.Router) Option {
 }
 
 // Selector is used to select a route
-func Selector(s selector.Selector) Option {
+func Selector(s router.Selector) Option {
 	return func(o *Options) {
 		o.Selector = s
 	}
@@ -366,14 +364,14 @@ func WithRouter(r router.Router) CallOption {
 }
 
 // WithSelector sets the selector to use for this call
-func WithSelector(s selector.Selector) CallOption {
+func WithSelector(s router.Selector) CallOption {
 	return func(o *CallOptions) {
 		o.Selector = s
 	}
 }
 
 // WithSelectOptions sets the options to pass to the selector for this call
-func WithSelectOptions(sops ...selector.SelectOption) CallOption {
+func WithSelectOptions(sops ...router.SelectOption) CallOption {
 	return func(o *CallOptions) {
 		o.SelectOptions = sops
 	}

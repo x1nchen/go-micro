@@ -384,8 +384,8 @@ func (r *rpcClient) Call(ctx context.Context, request client.Request, response i
 		// make the call
 		err = rcall(ctx, node, request, response, callOpts)
 
-		// record the result of the call to inform future routing decisions
-		r.opts.Selector.Record(node, err)
+		// TODO: record call status and provide to router
+		// including time taken to send the call
 
 		return err
 	}
@@ -491,8 +491,7 @@ func (r *rpcClient) Stream(ctx context.Context, request client.Request, opts ...
 		// perform the call
 		stream, err := r.stream(ctx, node, request, callOpts)
 
-		// record the result of the call to inform future routing decisions
-		r.opts.Selector.Record(node, err)
+		// TODO: record error status with router
 
 		return stream, err
 	}
