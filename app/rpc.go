@@ -46,7 +46,7 @@ func (s *rpcApp) Broadcast(topic string, msg interface{}) error {
 	return s.Client().Publish(context.Background(), m)
 }
 
-func (s *rpcApp) Handle(v interface{}) error {
+func (s *rpcApp) Register(v interface{}) error {
 	h := s.Server().NewHandler(v)
 	return s.Server().Handle(h)
 }
