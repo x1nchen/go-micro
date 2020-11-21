@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/asim/nitro/app/auth"
 	"github.com/asim/nitro/app/codec"
+	"github.com/asim/nitro/app/crypto"
 	"github.com/asim/nitro/app/event"
 	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/network"
@@ -20,7 +20,7 @@ type Options struct {
 	Codecs       map[string]codec.NewCodec
 	Broker       event.Broker
 	Registry     registry.Registry
-	Auth         auth.Auth
+	Auth         crypto.Auth
 	Transport    network.Transport
 	Metadata     map[string]string
 	Name         string
@@ -170,7 +170,7 @@ func Registry(r registry.Registry) Option {
 }
 
 // Auth mechanism for role based access control
-func Auth(a auth.Auth) Option {
+func Auth(a crypto.Auth) Option {
 	return func(o *Options) {
 		o.Auth = a
 	}

@@ -1,5 +1,5 @@
 // Package auth provides authentication and authorization capability
-package auth
+package crypto
 
 import (
 	"errors"
