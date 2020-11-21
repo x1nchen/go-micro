@@ -36,7 +36,7 @@ func (s *rpcApp) Options() Options {
 	return s.opts
 }
 
-func (s *rpcApp) Request(name, ep string, req, rsp interface{}) error {
+func (s *rpcApp) Execute(name, ep string, req, rsp interface{}) error {
 	r := s.Client().NewRequest(name, ep, req)
 	return s.Client().Call(context.Background(), r, rsp)
 }
