@@ -10,11 +10,11 @@ Nitro will provide the core requirements for distributed app development, IoT, e
 The **Nitro** model is in-memory defaults with a pluggable architecture. Blaze with pure in-memory development and swap out as needed 
 to go multi-process or multi-host.
 
-Nitro is currently undergoing a complete rewrite and is considered unstable for use.
+Note: Nitro is currently undergoing a complete rewrite and is considered unstable for use.
 
 ## Features
 
-V3 aka Nitro TBD. Focusing on dapps, IoT, edge and p2p. Potential features include.
+Now focusing on dapps, IoT, edge and p2p. Features include:
 
 - Lightweight RPC based communications
 - Event broadcasting and notifications
@@ -22,6 +22,7 @@ V3 aka Nitro TBD. Focusing on dapps, IoT, edge and p2p. Potential features inclu
 - Consensus protocol and execution engine
 - WebAssembly target compilation support
 - Unique randomized token generation aka BLS
+- P2P networking stack defined in user space
 
 ## Docs
 
@@ -35,24 +36,18 @@ See [nitro/discussions](https://github.com/asim/nitro/discussions) for any discu
 
 ### What happened to Go Micro?
 
-Go Micro has now been renamed to Nitro. Go Micro moved back to being a personal project. So no longer lives under the organisation github.com/micro. 
+Go Micro has now been renamed to Nitro. Go Micro moved back to being a personal project and no longer lives under the organisation github.com/micro. 
 The company is now doubling down on Micro itself and has pulled in the needed interfaces to consolidate a Server, Framework and CLI into one tool. 
 Go Micro is now no longer maintained by a company. Yet it continued to create confusion even as a personal repo. So for that reason, we're renaming 
-to Nitro.
+to Nitro. Go Micro V2 has been archived at [microhq/go-micro](https://github.com/microhq/go-micro) and the plugins at 
+[microhq/plugins](https://github.com/microhq/go-plugins).
 
 ### Why has the license changed from Apache 2.0 to Polyform Noncommercial
 
 Go Micro was largely a solo maintained effort for the entirety of its lifetime. It has enabled the creation of a company called Micro Services, Inc. which 
 now focuses on [Micro](https://github.com/micro/micro) as a Service and has consolidated any interfaces here into a service library in that project. For 
-the most part, Go Micro was unfunded and in some ways under appreciated. In version 3.0, going back to something of a personal project of more than 6 years 
-I have made the hard decision to relicense as a noncommercial project. For any commercial applications I am looking for [github sponsorship](https://github.com/sponsors/asim) 
-so that I can then use those funds for maintenance and support efforts.
-
-### Where are all the plugins?
-
-The plugins now live in [github.com/asim/nitro-plugins](https://github.com/asim/nitro-plugins). This was to reduce the overall size and scope of Go Micro to purely 
-a set of interfaces and standard library implementations. Go Plugins is Apache 2.0 licensed but relies on Nitro interfaces and so again can only be used in 
-noncommercial setting without a commercial license.
+the most part, Go Micro was underfunded and in some ways under appreciated. In version 3.0, going back to something of a personal project of more than 6 years 
+I have made the hard decision to relicense as a noncommercial project. 
 
 ### What's the new direction of Nitro?
 
@@ -61,26 +56,6 @@ but will only do so without external dependencies. All those external dependenci
 picked up with minimal overhead for all sorts of new applications that have a low memory or low resource footprint. The assumption is there are places 
 which would like to use distributed apps just as embedded systems or web assembly, unikernels, and related targets that would benefit from a framework 
 that defined these as primitives for such use.
-
-### Where is the top level Service definition?
-
-The top level service definition has been moved to the [app](https://github.com/asim/nitro/tree/master/app) package. Nitro exploded in terms 
-of the interfaces it offered. While originally it was a small library, this increase in packages has meant the top level can't really provide full scope 
-for everything. It's unclear at this time whether the top level definition should return.
-
-### Where are the default initialised interfaces?
-
-The defaults are gone. This proved to be a bad design pattern which meant one definition of an interface needed to live along side it. Over time it became 
-quite complex and switching out meant you had a pre-initialised implementation there with a lot of cleanup that wasn't possible. So removing it feels 
-as though a cleaner approach to interface design and modularisation of packages.
-
-### Where is the cmd package, flag parsing etc?
-
-These are also gone. The complexity of this code was quite honestly horrible. The command package had to make assumptions about how to load plugins because 
-every package depends on other package. As a whole system this became impossible to maintain and even in Micro we'll be looking to scrap it for simpler 
-initialisation. The flag parsing, plugin loading, etc is all gone in favour of users self defining it. What we find is most plugins require more initialisiation 
-than what we can provide as hard coded values. For this reason we may look into [github.com/google/wire](https://github.com/google/wire) as a better 
-alternative.
 
 ### How do Nitro and Micro now differ?
 
