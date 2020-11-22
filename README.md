@@ -82,8 +82,7 @@ instead as a company and platform team.
 
 Yes. Go Micro 2.0 is still Apache 2.0 licensed which means you can still freely use it for everything you were using before. If you're a new user 
 you can do the same. These things are using go modules so you're import path is simply `github.com/micro/go-micro/v2` as it was before. Because 
-GitHub handles redirects this should not break. Please continue to use it if you like, but my own support for 2.0 is now end of life. I will be 
-focusing on some side hacking on 3.0 as I find time.
+GitHub handles redirects this should not break. Please continue to use it if you like, but my own support for 2.0 is now end of life.
 
 ## License
 
