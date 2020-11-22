@@ -22,7 +22,11 @@ Now focusing on dapps, IoT, edge and p2p. Features include:
 - Consensus protocol and execution engine
 - WebAssembly target compilation support
 - Unique randomized token generation aka BLS
-- P2P networking stack defined in user space
+- P2P gossip networking defined in user space
+
+## Future
+
+In the future there's the potential to launch a live network based on Nitro. More on that soon.
 
 ## Docs
 
