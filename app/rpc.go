@@ -12,11 +12,11 @@ import (
 	rpcServer "github.com/asim/nitro/app/server/rpc"
 )
 
-type rpcApp struct {
+type rpcProgram struct {
 	opts Options
 }
 
-func (s *rpcApp) Name(name string) {
+func (s *rpcProgram) Name(name string) {
 	s.opts.Server.Init(
 		server.Name(name),
 	)
@@ -25,50 +25,50 @@ func (s *rpcApp) Name(name string) {
 // Init initialises options. Additionally it calls cmd.Init
 // which parses command line flags. cmd.Init is only called
 // on first Init.
-func (s *rpcApp) Init(opts ...Option) {
+func (s *rpcProgram) Init(opts ...Option) {
 	// process options
 	for _, o := range opts {
 		o(&s.opts)
 	}
 }
 
-func (s *rpcApp) Options() Options {
+func (s *rpcProgram) Options() Options {
 	return s.opts
 }
 
-func (s *rpcApp) Execute(name, ep string, req, rsp interface{}) error {
+func (s *rpcProgram) Execute(name, ep string, req, rsp interface{}) error {
 	r := s.Client().NewRequest(name, ep, req)
 	return s.Client().Call(context.Background(), r, rsp)
 }
 
-func (s *rpcApp) Broadcast(event string, msg interface{}) error {
+func (s *rpcProgram) Broadcast(event string, msg interface{}) error {
 	m := s.Client().NewMessage(event, msg)
 	return s.Client().Publish(context.Background(), m)
 }
 
-func (s *rpcApp) Register(v interface{}) error {
+func (s *rpcProgram) Register(v interface{}) error {
 	h := s.Server().NewHandler(v)
 	return s.Server().Handle(h)
 }
 
-func (s *rpcApp) Subscribe(event string, v interface{}) error {
+func (s *rpcProgram) Subscribe(event string, v interface{}) error {
 	sub := s.Server().NewSubscriber(event, v)
 	return s.Server().Subscribe(sub)
 }
 
-func (s *rpcApp) Client() client.Client {
+func (s *rpcProgram) Client() client.Client {
 	return s.opts.Client
 }
 
-func (s *rpcApp) Server() server.Server {
+func (s *rpcProgram) Server() server.Server {
 	return s.opts.Server
 }
 
-func (s *rpcApp) String() string {
+func (s *rpcProgram) String() string {
 	return "rpc"
 }
 
-func (s *rpcApp) Start() error {
+func (s *rpcProgram) Start() error {
 	for _, fn := range s.opts.BeforeStart {
 		if err := fn(); err != nil {
 			return err
@@ -88,7 +88,7 @@ func (s *rpcApp) Start() error {
 	return nil
 }
 
-func (s *rpcApp) Stop() error {
+func (s *rpcProgram) Stop() error {
 	var gerr error
 
 	for _, fn := range s.opts.BeforeStop {
@@ -110,7 +110,7 @@ func (s *rpcApp) Stop() error {
 	return gerr
 }
 
-func (s *rpcApp) Run() error {
+func (s *rpcProgram) Run() error {
 	if err := s.Start(); err != nil {
 		return err
 	}
@@ -121,8 +121,8 @@ func (s *rpcApp) Run() error {
 	return s.Stop()
 }
 
-// New returns a new Nitro app
-func New(opts ...Option) *rpcApp {
+// New returns a new application program
+func New(opts ...Option) *rpcProgram {
 	b := mevent.NewBroker()
 	c := rpcClient.NewClient()
 	s := rpcServer.NewServer()
@@ -156,7 +156,7 @@ func New(opts ...Option) *rpcApp {
 		o(&options)
 	}
 
-	return &rpcApp{
+	return &rpcProgram{
 		opts: options,
 	}
 }
