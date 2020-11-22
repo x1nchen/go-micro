@@ -2,12 +2,12 @@
 
 <img src="https://avatars2.githubusercontent.com/u/73709577" />
 
-Nitro (formerly known as Go Micro) is a blazingly fast framework for distributed app development.
+**Nitro** (formerly known as Go Micro) is a blazingly fast framework for distributed app development.
 
 ## Overview
 
 Nitro will provide the core requirements for distributed app development, IoT, edge and p2p including RPC and Event driven communication. 
-The **Nitro** model is in-memory defaults with a pluggable architecture. Blaze with pure in-memory development and swap out as needed 
+The Nitro mantra is in-memory defaults with a pluggable architecture. Blaze with pure in-memory development and swap out as needed 
 to go multi-process or multi-host.
 
 Note: Nitro is currently undergoing a complete rewrite and is considered unstable for use.
