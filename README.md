@@ -30,7 +30,7 @@ In the future there's the potential to launch a live network based on Nitro. Mor
 
 ## Docs
 
-See [gonitro.dev/docs/](https://gonitro.dev/docs/)
+See [gonitro.dev/docs](https://gonitro.dev/docs/)
 
 ## Discussion
 
