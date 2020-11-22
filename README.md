@@ -66,7 +66,7 @@ that defined these as primitives for such use.
 Micro is a platform for cloud native development. A complete experience that includes a server, framework and multi-language clients. Beyond that it also 
 include environments, multi-tenancy and many more features which push it towards being a hosted Micro as a Service offering. It is a complete platform.
 
-Nitro is more of a pluggable framework for distributed app development and now once again a purely personal project maintained by me and 
+Nitro is more of a embeddable framework for distributed app development and now once again a purely personal project maintained by me and 
 perhaps others who still find use for it commercially or noncommercially. It's of sentimental value and something I'd like to carry on for personal projects 
 such as things related to edge, IoT, embedded systems, p2p, web assembly, etc.
 
