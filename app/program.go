@@ -5,7 +5,7 @@ package app
 type Program interface {
 	// Set the current application name
 	Name(string)
-	// Execute a remote program function
+	// Execute a function in a remote program
 	Execute(prog, fn string, req, rsp interface{}) error
 	// Broadcast an event to subscribers
 	Broadcast(event string, msg interface{}) error
