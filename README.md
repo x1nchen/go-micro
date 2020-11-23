@@ -49,10 +49,9 @@ to Nitro. Go Micro V2 has been archived at [microhq/go-micro](https://github.com
 ### What's the new direction of Nitro?
 
 Nitro will now focus on distributed app development using the Go standard library. It will continue to define abstractions for distributed systems 
-but will only do so without external dependencies. All those external dependencies will live in Nitro Plugins. In this manner the hope is Nitro can be 
-picked up with minimal overhead for all sorts of new applications that have a low memory or low resource footprint. The assumption is there are places 
-which would like to use distributed apps just as embedded systems or web assembly, unikernels, and related targets that would benefit from a framework 
-that defined these as primitives for such use.
+but will only do so without external dependencies. In this manner the hope is Nitro can be picked up with minimal overhead for all sorts of new 
+applications that have a low memory or low resource footprint. The assumption is there are places which would like to use distributed apps just as 
+embedded systems or web assembly, unikernels, and related targets that would benefit from a framework that defined these as primitives for such use.
 
 ### How do Nitro and Micro now differ?
 
