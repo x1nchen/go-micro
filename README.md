@@ -24,7 +24,7 @@ Features in development:
 - Consensus protocol and execution engine
 - WebAssembly target compilation support
 - Unique randomized token generation aka BLS
-- P2P gossip networking defined in user space
+- P2P gossip networking stack in userspace
 
 ## Future
 
