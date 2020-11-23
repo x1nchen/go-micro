@@ -2,7 +2,7 @@
 
 <img src="https://avatars2.githubusercontent.com/u/73709577" />
 
-**Nitro** (formerly known as Go Micro) is a future framework for distributed app development, IoT, edge and p2p.
+**Nitro** is a future framework for distributed app development, IoT, edge and p2p.
 
 ## Overview
 
