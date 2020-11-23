@@ -46,13 +46,6 @@ Go Micro is now no longer maintained by a company. Yet it continued to create co
 to Nitro. Go Micro V2 has been archived at [microhq/go-micro](https://github.com/microhq/go-micro) and the plugins at 
 [microhq/plugins](https://github.com/microhq/go-plugins).
 
-### Why has the license changed from Apache 2.0 to Polyform Noncommercial
-
-Go Micro was largely a solo maintained effort for the entirety of its lifetime. It has enabled the creation of a company called Micro Services, Inc. which 
-now focuses on [Micro](https://github.com/micro/micro) as a Service and has consolidated any interfaces here into a service library in that project. For 
-the most part, Go Micro was underfunded and in some ways under appreciated. In version 3.0, going back to something of a personal project of more than 6 years 
-I have made the hard decision to relicense as a noncommercial project. 
-
 ### What's the new direction of Nitro?
 
 Nitro will now focus on distributed app development using the Go standard library. It will continue to define abstractions for distributed systems 
@@ -83,6 +76,13 @@ instead as a company and platform team.
 Yes. Go Micro 2.0 is still Apache 2.0 licensed which means you can still freely use it for everything you were using before. If you're a new user 
 you can do the same. These things are using go modules so you're import path is simply `github.com/micro/go-micro/v2` as it was before. Because 
 GitHub handles redirects this should not break. Please continue to use it if you like, but my own support for 2.0 is now end of life.
+
+### Why has the license changed from Apache 2.0 to Polyform Noncommercial
+
+Go Micro was largely a solo maintained effort for the entirety of its lifetime. It has enabled the creation of a company called Micro Services, Inc. which 
+now focuses on [Micro](https://github.com/micro/micro) as a Service and has consolidated any interfaces here into a service library in that project. For 
+the most part, Go Micro was underfunded and in some ways under appreciated. In version 3.0, going back to something of a personal project of more than 6 years 
+I have made the hard decision to relicense as a noncommercial project. 
 
 ## License
 
