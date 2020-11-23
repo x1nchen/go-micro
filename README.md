@@ -65,7 +65,7 @@ such as things related to edge, IoT, embedded systems, p2p, web assembly, etc.
 ### I used Go Micro to build microservices. What should I do now?
 
 You should quite honestly go look at [Micro](https://github.com/micro/micro) and then consider the hosted offering at [m3o.com](https://m3o.com) which 
-starts as a purely free Dev environment in the cloud. Micro continues to address many of the concerns and requirements you had if not more. It is likely 
+starts as a purely free dev environment in the cloud. Micro continues to address many of the concerns and requirements you had if not more. It is likely 
 you managed metrics, tracing, logging and much other boilerplate that needed to be plugged in. Micro will now take this complete platform story approach 
 and help you in that journey e.g you're probably running managed kubernetes on a major cloud provider with many other things. We're doing that for you 
 instead as a company and platform team.
