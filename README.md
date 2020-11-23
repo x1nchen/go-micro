@@ -14,7 +14,9 @@ Note: Nitro is currently undergoing a complete rewrite and is considered unstabl
 
 ## Features
 
-Now focusing on dapps, IoT, edge and p2p. Features include:
+Nitro focuses on dapps, IoT, edge and p2p. 
+
+Features in development:
 
 - Lightweight RPC based communications
 - Event broadcasting and notifications
