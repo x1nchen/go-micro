@@ -18,7 +18,7 @@ Nitro focuses on dapps, IoT, edge and p2p.
 
 Features in development:
 
-- Lightweight RPC based communications
+- Lightweight RPC based communication
 - Event broadcasting and notifications
 - CRDT Data synchronisation and storage
 - Consensus protocol and execution engine
