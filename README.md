@@ -55,6 +55,10 @@ but will only do so without external dependencies. In this manner the hope is Ni
 applications that have a low memory or low resource footprint. The assumption is there are places which would like to use distributed apps just as 
 embedded systems or web assembly, unikernels, and related targets that would benefit from a framework that defined these as primitives for such use.
 
+### How does this relate to AWS Nitro?
+
+It doesn't. We're a more popular, better, faster framework with the same name. 
+
 ### How do Nitro and Micro now differ?
 
 Micro is a platform for cloud native development. A complete experience that includes a server, framework and multi-language clients. Beyond that it also 
