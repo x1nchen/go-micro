@@ -2,7 +2,7 @@
 
 <img src="https://avatars2.githubusercontent.com/u/73709577" />
 
-**Nitro** is a futuristic blazingly fast framework for distributed app development, IoT, edge and p2p.
+**Nitro** is a futuristic blazingly fast embeddable framework for distributed app development, IoT, edge and p2p.
 
 ## Overview
 
