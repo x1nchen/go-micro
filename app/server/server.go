@@ -133,7 +133,7 @@ type Subscriber interface {
 type Option func(*Options)
 
 var (
-	DefaultAddress          = ":0"
+	DefaultAddress          = "unix:///tmp/nitro.sock"
 	DefaultName             = "nitro"
 	DefaultVersion          = "latest"
 	DefaultId               = uuid.New().String()

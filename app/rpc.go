@@ -6,8 +6,9 @@ import (
 	"github.com/asim/nitro/app/client"
 	rpcClient "github.com/asim/nitro/app/client/rpc"
 	mevent "github.com/asim/nitro/app/event/memory"
-	tmem "github.com/asim/nitro/app/network/memory"
+	sock "github.com/asim/nitro/app/network/socket"
 	"github.com/asim/nitro/app/registry/memory"
+	"github.com/asim/nitro/app/router/static"
 	"github.com/asim/nitro/app/server"
 	rpcServer "github.com/asim/nitro/app/server/rpc"
 )
@@ -127,10 +128,12 @@ func New(opts ...Option) *rpcProgram {
 	c := rpcClient.NewClient()
 	s := rpcServer.NewServer()
 	r := memory.NewRegistry()
-	t := tmem.NewTransport()
+	t := sock.NewTransport()
+	st := static.NewRouter()
 
 	// set client options
 	c.Init(
+		client.Router(st),
 		client.Broker(b),
 		client.Registry(r),
 		client.Transport(t),

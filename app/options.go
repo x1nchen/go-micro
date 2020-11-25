@@ -5,15 +5,10 @@ import (
 	"time"
 
 	"github.com/asim/nitro/app/client"
-	rpcClient "github.com/asim/nitro/app/client/rpc"
 	"github.com/asim/nitro/app/event"
-	mevent "github.com/asim/nitro/app/event/memory"
 	"github.com/asim/nitro/app/network"
-	tmem "github.com/asim/nitro/app/network/memory"
 	"github.com/asim/nitro/app/registry"
-	"github.com/asim/nitro/app/registry/memory"
 	"github.com/asim/nitro/app/server"
-	rpcServer "github.com/asim/nitro/app/server/rpc"
 )
 
 type Options struct {
@@ -34,43 +29,6 @@ type Options struct {
 }
 
 type Option func(*Options)
-
-func NewOptions(opts ...Option) Options {
-	b := mevent.NewBroker()
-	c := rpcClient.NewClient()
-	s := rpcServer.NewServer()
-	r := memory.NewRegistry()
-	t := tmem.NewTransport()
-
-	// set client options
-	c.Init(
-		client.Broker(b),
-		client.Registry(r),
-		client.Transport(t),
-	)
-
-	// set server options
-	s.Init(
-		server.Broker(b),
-		server.Registry(r),
-		server.Transport(t),
-	)
-
-	// define local opts
-	opt := Options{
-		Broker:   b,
-		Client:   c,
-		Server:   s,
-		Registry: r,
-		Context:  context.Background(),
-	}
-
-	for _, o := range opts {
-		o(&opt)
-	}
-
-	return opt
-}
 
 func Broker(b event.Broker) Option {
 	return func(o *Options) {
