@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 
-	"github.com/asim/nitro/app"
-	"github.com/asim/nitro/examples/program/types"
+	"github.com/gonitro/nitro/app"
+	"github.com/gonitro/nitro/examples/program/types"
 )
 
 type Handler struct{}

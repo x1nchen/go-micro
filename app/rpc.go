@@ -3,14 +3,14 @@ package app
 import (
 	"context"
 
-	"github.com/asim/nitro/app/client"
-	rpcClient "github.com/asim/nitro/app/client/rpc"
-	mevent "github.com/asim/nitro/app/event/memory"
-	sock "github.com/asim/nitro/app/network/socket"
-	"github.com/asim/nitro/app/registry/memory"
-	"github.com/asim/nitro/app/router/static"
-	"github.com/asim/nitro/app/server"
-	rpcServer "github.com/asim/nitro/app/server/rpc"
+	"github.com/gonitro/nitro/app/client"
+	rpcClient "github.com/gonitro/nitro/app/client/rpc"
+	mevent "github.com/gonitro/nitro/app/event/memory"
+	sock "github.com/gonitro/nitro/app/network/socket"
+	"github.com/gonitro/nitro/app/registry/memory"
+	"github.com/gonitro/nitro/app/router/static"
+	"github.com/gonitro/nitro/app/server"
+	rpcServer "github.com/gonitro/nitro/app/server/rpc"
 )
 
 type rpcProgram struct {
